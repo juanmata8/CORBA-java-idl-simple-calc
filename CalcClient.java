@@ -32,7 +32,7 @@ public class CalcClient {
             String name = "Calc";
             calcImpl = CalcHelper.narrow(ncRef.resolve_str(name));
 
-//			System.out.println(calcImpl);
+//			imprimimos el menu de funciones definidas en la interfaz;
 
 
             while (true) {
@@ -40,13 +40,16 @@ public class CalcClient {
                 out.println("2. Sub");
                 out.println("3. Mul");
                 out.println("4. Div");
-                out.println("5. exit");
+                out.println("5. Log");
+                out.println("6. Sqrt");
+                out.println("7. ConvertToBinary");
+                out.println("8. Exit");
                 out.println("--");
                 out.println("choice: ");
 
                 try {
                     String opt = br.readLine();
-                    if (opt.equals("5")) {
+                    if (opt.equals("8")) {
                         break;
                     } else if (opt.equals("1")) {
                         out.println("a+b= " + calcImpl.sum(getFloat("a"), getFloat("b")));
@@ -60,7 +63,14 @@ public class CalcClient {
                         } catch (DivisionByZero de) {
                             out.println("Division by zero!!!");
                         }
-                    }
+                        //cada opcion utiliza el metodo de la interfaz definido por el server
+                    } else if (opt.equals("5")) {
+                        out.println("log(a)= " + calcImpl.log(getFloat("a")));
+                    } else if (opt.equals("6")) {
+                        out.println("sqrt(a)= " + calcImpl.sqrt(getFloat("a")));
+                    } else if (opt.equals("7")) {
+                        out.println("binary(a)= " + calcImpl.binary(getFloat("a")));
+                    }   
                 } catch (Exception e) {
                     out.println("===");
                     out.println("Error with numbers");

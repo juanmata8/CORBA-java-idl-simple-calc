@@ -8,5 +8,8 @@ module CalcApp
 		float div(in float a, in float b) raises (DivisionByZero);
 		float mul(in float a, in float b);
 		float sub(in float a, in float b);
+		double log(in float a);
+		double sqrt(in float a);
+		string binary(in float a);
 	};
 };

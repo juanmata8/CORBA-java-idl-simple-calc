@@ -8,6 +8,7 @@ import org.omg.CORBA.*;
 import org.omg.PortableServer.*;
 
 import java.util.Properties;
+import java.lang.Math;
 
 class CalcImpl extends CalcPOA {
 
@@ -34,6 +35,25 @@ class CalcImpl extends CalcPOA {
     public float sub(float a, float b) {
         return a - b;
     }
+    // metodo agregado por juanmata8
+    @Override
+    public double log(float a){
+        return Math.log(a);
+    };
+    // metodo agregado por juanmata8
+    @Override
+	public double sqrt(float a){
+        return Math.sqrt(a);
+    };
+    // metodo agregado por juanmata8
+    @Override
+	public String binary(float a) {
+        int bits = Float.floatToIntBits(a);
+        String result = String.format("%32s", Integer.toBinaryString(bits)).replace(" ", "0");;
+        return result;
+    };
+
+
     private ORB orb;
 
     public void setORB(ORB orb_val) {
@@ -45,29 +65,27 @@ public class CalcServer {
 
     public static void main(String args[]) {
         try {
-            // create and initialize the ORB
+            // creamos e inicializamos el servidor ORB
             ORB orb = ORB.init(args, null);
 
-            // get reference to rootpoa & activate the POAManager
+            // Obtenemos una referencia a la raíz POA y la activamos
             POA rootpoa = POAHelper.narrow(orb.resolve_initial_references("RootPOA"));
             rootpoa.the_POAManager().activate();
 
-            // create servant and register it with the ORB
+            // creamos el servant y lo configuramos el ORB
             CalcImpl helloImpl = new CalcImpl();
             helloImpl.setORB(orb);
 
-            // get object reference from the servant
+            // referenciamos el objeto del servant, la interfaz
             org.omg.CORBA.Object ref = rootpoa.servant_to_reference(helloImpl);
             Calc href = CalcHelper.narrow(ref);
 
-            // get the root naming context
-            // NameService invokes the name service
+            // obtenemos el contexto de la raiz
             org.omg.CORBA.Object objRef = orb.resolve_initial_references("NameService");
-            // Use NamingContextExt which is part of the Interoperable
-            // Naming Service (INS) specification.
+            // Obtenemos una referencia al servicio de nombres
             NamingContextExt ncRef = NamingContextExtHelper.narrow(objRef);
 
-            // bind the Object Reference in Naming
+            // resolvemos el objeto referenciado en NamingContext
             String name = "Calc";
             NameComponent path[] = ncRef.to_name(name);
             ncRef.rebind(path, href);
